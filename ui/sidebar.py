@@ -3,7 +3,7 @@ import customtkinter as ctk
 
 class Sidebar(ctk.CTkFrame):
 
-    def __init__(self, master):
+    def __init__(self, master, open_callback=None, analyze_callback=None):
 
         super().__init__(master, width=220)
 
@@ -17,9 +17,25 @@ class Sidebar(ctk.CTkFrame):
 
         title.pack(pady=(20, 15))
 
+        self.open_btn = ctk.CTkButton(
+            self,
+            text="📂 Open Document",
+            command=open_callback,
+            height=40
+        )
+
+        self.open_btn.pack(fill="x", padx=15, pady=5)
+
+        self.analyze_btn = ctk.CTkButton(
+            self,
+            text="🔍 Analyze",
+            command=analyze_callback,
+            height=40
+        )
+
+        self.analyze_btn.pack(fill="x", padx=15, pady=5)
+
         buttons = [
-            "📂 Open Document",
-            "🔍 Analyze",
             "🧹 Clean",
             "🔢 Renumber",
             "✨ Format",
@@ -32,7 +48,8 @@ class Sidebar(ctk.CTkFrame):
             btn = ctk.CTkButton(
                 self,
                 text=text,
-                height=40
+                height=40,
+                state="disabled"
             )
 
             btn.pack(fill="x", padx=15, pady=5)

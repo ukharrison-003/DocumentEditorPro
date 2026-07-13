@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from tkinter import filedialog
+from engine.analyzer import DocumentAnalyzer
 from ui.sidebar import Sidebar
 from ui.dashboard import Dashboard
 from ui.statusbar import StatusBar
@@ -12,6 +14,8 @@ ctk.set_default_color_theme("blue")
 class DocumentEditorApp:
 
     def __init__(self):
+        self.selected_file = ""
+        self.analyzer = DocumentAnalyzer()
 
         self.root = ctk.CTk()
 
@@ -35,6 +39,38 @@ class DocumentEditorApp:
             columnspan=2,
             sticky="ew"
         )
+    def open_document(self):
+
+        filename = filedialog.askopenfilename(
+        filetypes=[("Word Documents", "*.docx")]
+    )
+
+        if filename:
+
+            self.selected_file = filename
+
+        self.status.set("Document selected.")
+
+        self.dashboard.current_file.configure(
+            text=f"Current File: {filename.split('/')[-1]}"
+        )
+
+
+    def analyze_document(self):
+
+        if self.selected_file == "":
+
+            self.status.set("Please open a document first.")
+
+            return
+
+        self.status.set("Analyzing document...")
+
+        result = self.analyzer.analyze(self.selected_file)
+
+        self.dashboard.update_statistics(result)
+
+        self.status.set("Analysis complete.")
 
     def run(self):
 

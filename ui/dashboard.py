@@ -57,3 +57,17 @@ class Dashboard(ctk.CTkFrame):
 
         self.blanks = InfoCard(cards, "Blank Paragraphs")
         self.blanks.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+
+    def update_statistics(self, result):
+
+        self.current_file.configure(
+        text=f"Current File: {result.filename}"
+        )
+
+        self.paragraphs.set_value(result.paragraphs)
+
+        self.headings.set_value(result.headings)
+
+        self.blanks.set_value(result.blank_paragraphs)
+
+        self.duplicates.set_value(result.duplicate_sections)
