@@ -1,0 +1,7 @@
+customtkinter
+python-docx
+rapidfuzz
+pillow
+openpyxl
+reportlab
+pyinstaller
