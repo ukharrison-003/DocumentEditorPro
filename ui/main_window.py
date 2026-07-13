@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 from ui.sidebar import Sidebar
-from ui.content import Content
+from ui.dashboard import Dashboard
 from ui.statusbar import StatusBar
 
 
@@ -25,8 +25,8 @@ class DocumentEditorApp:
         self.sidebar = Sidebar(self.root)
         self.sidebar.grid(row=0, column=0, sticky="ns")
 
-        self.content = Content(self.root)
-        self.content.grid(row=0, column=1, sticky="nsew")
+        self.dashboard = Dashboard(self.root)
+        self.dashboard.grid(row=0, column=1, sticky="nsew")
 
         self.status = StatusBar(self.root)
         self.status.grid(
