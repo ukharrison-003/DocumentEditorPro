@@ -1,5 +1,6 @@
 import customtkinter as ctk
 
+from engine.document_cleaner import DocumentCleaner
 from tkinter import filedialog
 from engine.analyzer import DocumentAnalyzer
 from ui.sidebar import Sidebar
@@ -16,6 +17,7 @@ class DocumentEditorApp:
     def __init__(self):
         self.selected_file = ""
         self.analyzer = DocumentAnalyzer()
+        self.cleaner = DocumentCleaner()
 
         self.root = ctk.CTk()
 
@@ -101,31 +103,49 @@ class DocumentEditorApp:
 
         if self.selected_file == "":
 
-            self.status.set(
-                "Please open a document first."
-            )
-
+            self.status.set("Please open a document first.")
             return
 
-        self.dashboard.add_log(
-            "Cleaning started..."
+        self.dashboard.add_log("Cleaning started...")
+        self.status.set("Cleaning document...")
+
+        output_file = self.selected_file.replace(
+            ".docx",
+            "_Cleaned.docx"
         )
 
-        self.status.set(
-            "Cleaning document..."
-        )
+        try:
 
-        # Cleaner will be connected here
+            result = self.cleaner.clean(
+                self.selected_file,
+                output_file
+            )
 
-        self.dashboard.add_log(
-            "Cleaning engine not connected yet."
-        )
+            self.dashboard.add_log(
+                f"Original Blocks : {result['original']}"
+            )
 
-        self.status.set(
-            "Ready."
-        )    
+            self.dashboard.add_log(
+                f"Duplicate Blocks Removed : {result['removed']}"
+            )
 
-        self.status.set("Analysis complete.")
+            self.dashboard.add_log(
+                f"Remaining Blocks : {result['cleaned']}"
+            )
+
+            self.dashboard.add_log(
+                f"Saved as:\n{output_file}"
+            )
+
+            self.status.set("Cleaning completed successfully!")
+
+        except Exception as e:
+
+            self.dashboard.add_log(
+                f"ERROR: {e}"
+            )
+
+            self.status.set("Cleaning failed.")
 
     def run(self):
 
