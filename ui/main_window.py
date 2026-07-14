@@ -26,7 +26,13 @@ class DocumentEditorApp:
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
 
-        self.sidebar = Sidebar(self.root)
+        self.sidebar = Sidebar(
+            self.root,
+            open_callback=self.open_document,
+            analyze_callback=self.analyze_document,
+            clean_callback=self.clean_document,
+            report_callback=self.show_report
+        )
         self.sidebar.grid(row=0, column=0, sticky="ns")
 
         self.dashboard = Dashboard(self.root)
@@ -40,6 +46,9 @@ class DocumentEditorApp:
             sticky="ew"
         )
     def open_document(self):
+        print("Button clicked")
+
+        self.status.set("Document selected.")
 
         filename = filedialog.askopenfilename(
         filetypes=[("Word Documents", "*.docx")]
@@ -54,7 +63,9 @@ class DocumentEditorApp:
         self.dashboard.current_file.configure(
             text=f"Current File: {filename.split('/')[-1]}"
         )
-
+        self.dashboard.add_log(
+            f"Opened {filename.split('/')[-1]}"
+        )
 
     def analyze_document(self):
 
@@ -65,10 +76,54 @@ class DocumentEditorApp:
             return
 
         self.status.set("Analyzing document...")
+        self.dashboard.add_log(
+            "Analysis started..."
+)
 
         result = self.analyzer.analyze(self.selected_file)
 
         self.dashboard.update_statistics(result)
+        self.dashboard.add_log(
+            "Analysis completed."
+)
+    def show_report(self):
+
+        self.dashboard.add_log(
+        "Duplicate report is not available yet."
+    )
+
+        self.status.set(
+        "Duplicate report coming soon."
+    )
+
+
+    def clean_document(self):
+
+        if self.selected_file == "":
+
+            self.status.set(
+                "Please open a document first."
+            )
+
+            return
+
+        self.dashboard.add_log(
+            "Cleaning started..."
+        )
+
+        self.status.set(
+            "Cleaning document..."
+        )
+
+        # Cleaner will be connected here
+
+        self.dashboard.add_log(
+            "Cleaning engine not connected yet."
+        )
+
+        self.status.set(
+            "Ready."
+        )    
 
         self.status.set("Analysis complete.")
 
